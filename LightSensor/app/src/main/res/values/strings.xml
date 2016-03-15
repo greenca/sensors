@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Light Sensor</string>
+    <string name="instructions">Point camera at a white sheet of paper to measure the light level</string>
+    <string name="button_label">Measure Light</string>
+</resources>

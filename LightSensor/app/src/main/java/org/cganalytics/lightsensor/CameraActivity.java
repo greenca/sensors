@@ -3,20 +3,11 @@ package org.cganalytics.lightsensor;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class CameraActivity extends Activity {
 
@@ -39,28 +30,6 @@ public class CameraActivity extends Activity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
-            Log.d(TAG, "onPictureTaken");
-
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null) {
-                Log.d(TAG, "Error creating media file, check storage permissions");
-                return;
-            }
-
-            Log.d(TAG, "Created pictureFile: " + pictureFile.getAbsolutePath());
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
-                fos.close();
-            } catch (FileNotFoundException e) {
-                Log.d(TAG, "File not foud: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d(TAG, "Error accessing file: " + e.getMessage());
-            }
-
-            Log.d(TAG, "Wrote pictureFile");
-
             Intent resultIntent = new Intent();
             resultIntent.putExtra("data", data);
 
@@ -68,27 +37,6 @@ public class CameraActivity extends Activity {
             finish();
         }
     };
-
-    private static File getOutputMediaFile(int type) {
-        File mediaStoreDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "lightsensor");
-
-        if (! mediaStoreDir.exists()) {
-            if (! mediaStoreDir.mkdirs()) {
-                Log.d(TAG, "Failed to create directory");
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStoreDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

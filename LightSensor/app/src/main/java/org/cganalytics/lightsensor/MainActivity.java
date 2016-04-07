@@ -2,14 +2,13 @@ package org.cganalytics.lightsensor;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.Camera;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -26,14 +25,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void measureLight(View view) {
-        Intent picIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent picIntent = new Intent(this, CameraActivity.class);
         startActivityForResult(picIntent, REQ_CODE_TAKE_PICTURE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        Log.d(TAG, "ActivityResult");
+
         if (requestCode == REQ_CODE_TAKE_PICTURE && resultCode == RESULT_OK) {
-            Bitmap bmp = (Bitmap) intent.getExtras().get("data");
+            byte[] bitmapdata = (byte[]) intent.getExtras().get("data");
+            Bitmap bmp = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
 
             int width = bmp.getWidth();
             int height = bmp.getHeight();

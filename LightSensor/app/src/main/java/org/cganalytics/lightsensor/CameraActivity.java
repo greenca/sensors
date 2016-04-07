@@ -1,7 +1,9 @@
 package org.cganalytics.lightsensor;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -37,11 +39,15 @@ public class CameraActivity extends Activity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
+            Log.d(TAG, "onPictureTaken");
+
             File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
             if (pictureFile == null) {
                 Log.d(TAG, "Error creating media file, check storage permissions");
                 return;
             }
+
+            Log.d(TAG, "Created pictureFile: " + pictureFile.getAbsolutePath());
 
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
@@ -52,6 +58,14 @@ public class CameraActivity extends Activity {
             } catch (IOException e) {
                 Log.d(TAG, "Error accessing file: " + e.getMessage());
             }
+
+            Log.d(TAG, "Wrote pictureFile");
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("data", data);
+
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
     };
 

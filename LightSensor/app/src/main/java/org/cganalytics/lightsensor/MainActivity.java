@@ -3,24 +3,27 @@ package org.cganalytics.lightsensor;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static String TAG = MainActivity.class.getSimpleName();
+    private static final int REQ_CODE_TAKE_PICTURE = 900;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-
-    private static final int REQ_CODE_TAKE_PICTURE = 900;
 
     public void measureLight(View view) {
         Intent picIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

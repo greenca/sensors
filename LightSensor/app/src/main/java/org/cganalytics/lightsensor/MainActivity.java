@@ -1,5 +1,6 @@
 package org.cganalytics.lightsensor;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,12 +12,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Arrays;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private static String TAG = MainActivity.class.getSimpleName();
     private static final int REQ_CODE_TAKE_PICTURE = 900;
+    private static String outputFile = "lightsensordata.csv";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
             TextView brightView = (TextView) findViewById(R.id.brightness);
             brightView.setText(String.valueOf(brightness));
+
+            Date timestamp = new Date();
+            String outputText = timestamp.toString() + "," + brightness + "\n";
+            FileOutputStream outputStream;
+            try {
+                outputStream = openFileOutput(outputFile, Context.MODE_APPEND);
+                outputStream.write(outputText.getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG, outputText);
 
         }
     }
